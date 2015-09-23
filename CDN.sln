@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNClient", "CDN\CDNClient.csproj", "{48F14FB1-356C-4A09-8477-76515430282D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNCache", "CDNCache\CDNCache.csproj", "{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNServer", "CDNServer\CDNServer.csproj", "{77F2947D-5969-4600-A932-8C67DA8E522F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{48F14FB1-356C-4A09-8477-76515430282D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F14FB1-356C-4A09-8477-76515430282D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F14FB1-356C-4A09-8477-76515430282D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F14FB1-356C-4A09-8477-76515430282D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77F2947D-5969-4600-A932-8C67DA8E522F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77F2947D-5969-4600-A932-8C67DA8E522F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77F2947D-5969-4600-A932-8C67DA8E522F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77F2947D-5969-4600-A932-8C67DA8E522F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
