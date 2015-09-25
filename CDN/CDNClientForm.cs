@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace CDN
 {
-    public partial class Form1 : Form
+    public partial class CDNClientForm : Form
     {
-        public Form1()
+        public CDNClientForm()
         {
             InitializeComponent();
         }

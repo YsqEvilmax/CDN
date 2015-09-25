@@ -7,11 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CDNServer
+namespace CDNCommon
 {
-    class FileSystemDepository
+    public class FileSystemDepository : ISerializable
     {
+        public FileSystemDepository()
+        {
+        }
+
         public FileSystemDepository(String path)
+            : this()
         {
             root = new DirectoryNode(path);
             root.Scan();
@@ -22,10 +27,16 @@ namespace CDNServer
             return root.ToString();
         }
 
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) { throw new System.ArgumentNullException("info"); }
+            info.AddValue("from", this.root);
+        }
+
         private DirectoryNode root;
     }
 
-    [Serializable()]
+    [Serializable]
     abstract class CommonNode : TreeNode
     {       
         public override string ToString()
