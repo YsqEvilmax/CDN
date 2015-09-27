@@ -8,9 +8,10 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
-namespace CDNCommon
+namespace CDN
 {
     [Serializable]
     public class CDNMessage : ISerializable
@@ -39,7 +40,9 @@ namespace CDNCommon
 
         public MSGID id { get; set; }
         public String content { get; set; }
+        [XmlIgnore]
         public IPEndPoint from { get; set; }
+        [XmlIgnore]
         public IPEndPoint to { get; set; }
     }
 
@@ -48,6 +51,7 @@ namespace CDNCommon
     {
         static public String Serialize(T t)
         {
+            Type x = t.GetType();
             XmlSerializer ser = new XmlSerializer(t.GetType());
             StringBuilder sb = new StringBuilder();
             StringWriter writer = new StringWriter(sb);
@@ -67,13 +71,18 @@ namespace CDNCommon
         }
     }
 
-
     public class CDNNetWork : TcpListener
     {
-        public CDNNetWork(IPAddress localaddr, int port)
-            : base(localaddr, port)
+        public CDNNetWork(IPEndPoint point)
+            : base(point)
         {
             fsd = new FileSystemDepository("./");
+        }
+
+        public static IPEndPoint GetLocalIPPoint()
+        {
+            IPAddress localAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+            return new IPEndPoint(localAddress, 0);
         }
 
         public async Task Idle()
@@ -98,6 +107,11 @@ namespace CDNCommon
         {
         }
 
-        protected FileSystemDepository fsd;
+        public override string ToString()
+        {
+            return "IP:\r\n" + base.LocalEndpoint.ToString() + "\r\n" 
+                + "FileSystemDepository:\r\n"+ fsd.ToString() + "\r\n";
+        }
+        public FileSystemDepository fsd { get; protected set; }
     }
 }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNClient", "CDN\CDNClient.csproj", "{48F14FB1-356C-4A09-8477-76515430282D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNClient", "CDNClient\CDNClient.csproj", "{48F14FB1-356C-4A09-8477-76515430282D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E5960229-9F78-4AF2-8E72-77056E3891A8} = {E5960229-9F78-4AF2-8E72-77056E3891A8}
 	EndProjectSection

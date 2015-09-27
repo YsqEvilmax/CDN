@@ -7,7 +7,7 @@
     <ProjectGuid>{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CDNCache</RootNamespace>
+    <RootNamespace>CDN</RootNamespace>
     <AssemblyName>CDNCache</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

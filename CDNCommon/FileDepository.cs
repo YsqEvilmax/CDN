@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CDNCommon
+namespace CDN
 {
     public class FileSystemDepository : ISerializable
     {
@@ -33,11 +33,11 @@ namespace CDNCommon
             info.AddValue("from", this.root);
         }
 
-        private DirectoryNode root;
+        public DirectoryNode root { get; protected set; }
     }
 
     [Serializable]
-    abstract class CommonNode : TreeNode
+    public abstract class CommonNode : TreeNode
     {       
         public override string ToString()
         {
@@ -53,7 +53,7 @@ namespace CDNCommon
         protected FileSystemInfo info;
     }
 
-    class DirectoryNode : CommonNode
+    public class DirectoryNode : CommonNode
     {
         public DirectoryNode(String path)
         {
@@ -80,7 +80,7 @@ namespace CDNCommon
         }
     }
 
-    class FileNode : CommonNode
+    public class FileNode : CommonNode
     {
         public FileNode(String path)
         {

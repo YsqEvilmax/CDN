@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
-using CDNCommon;
+using CDN;
 using System.Net.Sockets;
 using System.IO;
 
@@ -12,8 +12,8 @@ namespace CDN
 {
     class CDNClient : CDNNetWork
     {
-        public CDNClient(IPAddress localaddr, int port)
-            : base(localaddr, port)
+        public CDNClient(IPEndPoint point)
+            : base(point)
         { }
 
         protected override async Task Handle(CDNMessage msg)

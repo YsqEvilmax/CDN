@@ -7,7 +7,7 @@
     <ProjectGuid>{E5960229-9F78-4AF2-8E72-77056E3891A8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CDNCommon</RootNamespace>
+    <RootNamespace>CDN</RootNamespace>
     <AssemblyName>CDNCommon</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

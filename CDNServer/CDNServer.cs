@@ -6,14 +6,14 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using CDNCommon;
+using CDN;
 
-namespace CDNServer
+namespace CDN
 {
     class CDNServer : CDNNetWork
     {
-        public CDNServer(IPAddress localaddr, int port)
-            : base(localaddr, port)
+        public CDNServer(IPEndPoint point)
+            : base(point)
         {
         }
 

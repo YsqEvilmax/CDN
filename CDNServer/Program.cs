@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CDNCommon;
+using CDN;
 
-namespace CDNServer
+namespace CDN
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Please enter a valid file address to bulid a FileSystem depository!");
-            String path = Console.ReadLine();
-            FileSystemDepository fsd = new FileSystemDepository(path);
-            Console.WriteLine(fsd.ToString());
+            //Console.WriteLine("Please enter a valid file address to bulid a FileSystem depository!");
+            //String path = Console.ReadLine();
+            CDNServer server = new CDNServer(CDNNetWork.GetLocalIPPoint());
+            server.Start();
+            server.Idle();
+            Console.WriteLine(server);
             Console.ReadLine();
         }
     }
