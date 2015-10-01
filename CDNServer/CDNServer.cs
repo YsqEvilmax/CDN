@@ -21,38 +21,37 @@ namespace CDN
         {
             try
             {
-                CDNMessage newMsg = new CDNMessage();
-                newMsg.id = msg.id;
-                newMsg.from = LocalEndpoint as IPEndPoint;
-                newMsg.to = msg.from;
-                switch (msg.id)
+                TcpClient client = new TcpClient(msg.address, msg.port);
+                CDNMessage newMsg = msg.Clone() as CDNMessage;            
+                NetworkStream ns = client.GetStream();
+                using (StreamWriter sw = new StreamWriter(ns))
                 {
-                    case CDNMessage.MSGID.SHOW:
-                        {
-                            TcpClient client = new TcpClient(msg.from);
-                            NetworkStream ns = client.GetStream();
-                            using (StreamWriter sw = new StreamWriter(ns))
+                    switch (msg.id)
+                    {
+                        case CDNMessage.MSGID.TEST:
+                            {
+                            }
+                            break;
+                        case CDNMessage.MSGID.SHOW:
                             {
                                 newMsg.content = Serializer<FileSystemDepository>.Serialize(fsd);
-                                String context = Serializer<CDNMessage>.Serialize(newMsg);
-                                await sw.WriteAsync(context);
                             }
-                            ns.Close();
-                            client.Close();
-                        }
-                        break;
-                    case CDNMessage.MSGID.DOWNLOAD:
-                        {
+                            break;
+                        case CDNMessage.MSGID.DOWNLOAD:
+                            {
 
-                        }
-                        break;
-                    default:
-                        break;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    String context = Serializer<CDNMessage>.Serialize(newMsg);
+                    sw.Write(context);
                 }
             }
             catch(Exception e)
             {
-
+                Console.WriteLine(e);
             }
         }
     }

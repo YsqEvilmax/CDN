@@ -55,7 +55,12 @@ namespace CDN
 
     public class DirectoryNode : CommonNode
     {
+        public DirectoryNode()
+            : base()
+        { }
+
         public DirectoryNode(String path)
+            : this()
         {
             info = new DirectoryInfo(path);
         }
@@ -82,7 +87,12 @@ namespace CDN
 
     public class FileNode : CommonNode
     {
+        public FileNode()
+            :base()
+        { }
+
         public FileNode(String path)
+            : this()
         {
             info = new FileInfo(path);
         }

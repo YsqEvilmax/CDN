@@ -7,6 +7,7 @@ using System.Net;
 using CDN;
 using System.Net.Sockets;
 using System.IO;
+using System.Windows.Forms;
 
 namespace CDN
 {
@@ -22,6 +23,11 @@ namespace CDN
             {
                 switch (msg.id)
                 {
+                    case CDNMessage.MSGID.TEST:
+                        {
+                            MessageBox.Show("Successfully connected!");
+                        }
+                        break;
                     case CDNMessage.MSGID.SHOW:
                         {
                             fsd = Serializer<FileSystemDepository>.Deserialize(msg.content);
