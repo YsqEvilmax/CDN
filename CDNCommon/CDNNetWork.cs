@@ -33,7 +33,7 @@ namespace CDN
         }
 
         #region Serialization Control
-        //This function is necessary for soap Serialization
+        //This function is necessary for soap Deserialization
         protected CDNMessage(SerializationInfo info, StreamingContext context)
         {
             if (info == null) { throw new System.ArgumentNullException("info"); }
@@ -78,14 +78,14 @@ namespace CDN
     public class Serializer<T>
     where T : class, ISerializable, new()
     {
-        static public String Serialize(T t)
+        static public String Serialize<F>(T t) where F : IFormatter, new()
         {
             String result = "";
             try
             {
                 using (MemoryStream stream = new MemoryStream())
                 {
-                    IFormatter ser = new SoapFormatter();
+                    IFormatter ser = new F();
                     ser.Serialize(stream, t);
                     result = Encoding.UTF8.GetString(stream.GetBuffer());
                 }
@@ -97,19 +97,21 @@ namespace CDN
             return result;
         }
 
-        static public T Deserialize(String s)
+        static public T Deserialize<F>(String s) where F : IFormatter, new()
         {
             T t = null;
             try
             {
                 using (MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(s)))
                 {
-                    IFormatter ser = new SoapFormatter();
+                    IFormatter ser = new F();
                     t = ser.Deserialize(stream) as T;
                 }
             }
             catch (Exception e)
-            { Console.WriteLine(e); }
+            {
+                Console.WriteLine(e);
+            }
             return t;
         }
     }
@@ -119,7 +121,7 @@ namespace CDN
         public CDNNetWork(IPEndPoint point)
             : base(point)
         {
-            fsd = new FileSystemDepository("./");
+            root = new DirectoryNode("./");
         }
 
         public static IPEndPoint GetLocalIPPoint()
@@ -137,7 +139,7 @@ namespace CDN
                 using (StreamReader sr = new StreamReader(ns))
                 {
                     String context = await sr.ReadToEndAsync();
-                    CDNMessage msg = Serializer<CDNMessage>.Deserialize(context);
+                    CDNMessage msg = Serializer<CDNMessage>.Deserialize<SoapFormatter>(context);
                     Handle(msg);
                 }
             }
@@ -151,8 +153,8 @@ namespace CDN
         public override string ToString()
         {
             return "IP:\r\n" + base.LocalEndpoint.ToString() + "\r\n"
-                + "FileSystemDepository:\r\n" + fsd.ToString() + "\r\n";
+                + "FileSystemDepository:\r\n" + root.ToString() + "\r\n";
         }
-        public FileSystemDepository fsd { get; protected set; }
+        public DirectoryNode root { get; protected set; }
     }
 }

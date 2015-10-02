@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
-using CDN;
+using System.Runtime.Serialization.Formatters.Soap;
 
 namespace CDN
 {
@@ -15,6 +12,7 @@ namespace CDN
         public CDNServer(IPEndPoint point)
             : base(point)
         {
+            root.Scan();
         }
 
         protected override async Task Handle(CDNMessage msg)
@@ -34,7 +32,8 @@ namespace CDN
                             break;
                         case CDNMessage.MSGID.SHOW:
                             {
-                                newMsg.content = Serializer<FileSystemDepository>.Serialize(fsd);
+                                newMsg.content = Serializer<DirectoryNode>.Serialize<SoapFormatter>(root);
+                                Console.WriteLine("{0}", newMsg.content.Length);
                             }
                             break;
                         case CDNMessage.MSGID.DOWNLOAD:
@@ -45,7 +44,7 @@ namespace CDN
                         default:
                             break;
                     }
-                    String context = Serializer<CDNMessage>.Serialize(newMsg);
+                    String context = Serializer<CDNMessage>.Serialize<SoapFormatter>(newMsg);
                     sw.Write(context);
                 }
             }

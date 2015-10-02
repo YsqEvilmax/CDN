@@ -9,32 +9,39 @@ using System.Windows.Forms;
 
 namespace CDN
 {
-    public class FileSystemDepository : ISerializable
-    {
-        public FileSystemDepository()
-        {
-        }
+    //[Serializable]
+    //public class FileSystemDepository : ISerializable
+    //{
+    //    public FileSystemDepository()
+    //    {
+    //    }
 
-        public FileSystemDepository(String path)
-            : this()
-        {
-            root = new DirectoryNode(path);
-            root.Scan();
-        }
+    //    public FileSystemDepository(String path)
+    //        : this()
+    //    {
+    //        root = new DirectoryNode(path);
+    //        root.Scan();
+    //    }
 
-        public override string ToString()
-        {
-            return root.ToString();
-        }
+    //    protected FileSystemDepository(SerializationInfo info, StreamingContext context)
+    //    {
+    //        if (info == null) { throw new System.ArgumentNullException("info"); }
+    //        this.root = info.GetValue("root", typeof(DirectoryNode)) as DirectoryNode;
+    //    }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null) { throw new System.ArgumentNullException("info"); }
-            info.AddValue("from", this.root);
-        }
+    //    public override string ToString()
+    //    {
+    //        return root.ToString();
+    //    }
 
-        public DirectoryNode root { get; protected set; }
-    }
+    //    public void GetObjectData(SerializationInfo info, StreamingContext context)
+    //    {
+    //        if (info == null) { throw new System.ArgumentNullException("info"); }
+    //        info.AddValue("root", this.root);
+    //    }
+
+    //    public DirectoryNode root { get; protected set; }
+    //}
 
     [Serializable]
     public abstract class CommonNode : TreeNode
@@ -51,7 +58,6 @@ namespace CDN
         protected override void Serialize(SerializationInfo si, StreamingContext context)
         {
             base.Serialize(si, context);
-            //si.AddValue("FileSystem", this.info);
         }
 
         public override string ToString()
@@ -79,12 +85,13 @@ namespace CDN
             : this()
         {
             info = new DirectoryInfo(path);
+            Text = info.Name;
         }
 
         protected DirectoryNode(SerializationInfo si, StreamingContext context)
             : base(si, context)
         {
-            this.info = new DirectoryInfo(si.GetString("DirectoryInfo"));
+            this.info = si.GetValue("DirectoryInfo", typeof(DirectoryInfo)) as DirectoryInfo;
         }
 
         protected override void Serialize(SerializationInfo si, StreamingContext context)
@@ -125,12 +132,13 @@ namespace CDN
             : this()
         {
             info = new FileInfo(path);
+            Text = info.Name;
         }
 
         protected FileNode(SerializationInfo si, StreamingContext context)
             : base(si, context)
         {
-            this.info = new FileInfo(si.GetString("FileInfo"));
+            this.info = si.GetValue("FileInfo", typeof(FileInfo)) as FileInfo;
         }
 
         protected override void Serialize(SerializationInfo si, StreamingContext context)
