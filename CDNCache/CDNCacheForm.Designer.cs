@@ -36,9 +36,9 @@
             this.refreshButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.logListBox = new System.Windows.Forms.ListBox();
+            this.claerButton = new System.Windows.Forms.Button();
             this.remoteIpAddressControl = new CDN.IPAddressControl();
             this.localIpAddressControl = new CDN.IPAddressControl();
-            this.claerButton = new System.Windows.Forms.Button();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -119,6 +119,16 @@
             this.logListBox.Size = new System.Drawing.Size(517, 256);
             this.logListBox.TabIndex = 12;
             // 
+            // claerButton
+            // 
+            this.claerButton.Location = new System.Drawing.Point(82, 318);
+            this.claerButton.Name = "claerButton";
+            this.claerButton.Size = new System.Drawing.Size(63, 23);
+            this.claerButton.TabIndex = 2;
+            this.claerButton.Text = "Clear";
+            this.claerButton.UseVisualStyleBackColor = true;
+            this.claerButton.Click += new System.EventHandler(this.claerButton_Click);
+            // 
             // remoteIpAddressControl
             // 
             this.remoteIpAddressControl.Location = new System.Drawing.Point(99, 47);
@@ -136,16 +146,6 @@
             this.localIpAddressControl.Size = new System.Drawing.Size(319, 27);
             this.localIpAddressControl.TabIndex = 6;
             this.localIpAddressControl.Value = null;
-            // 
-            // claerButton
-            // 
-            this.claerButton.Location = new System.Drawing.Point(82, 318);
-            this.claerButton.Name = "claerButton";
-            this.claerButton.Size = new System.Drawing.Size(63, 23);
-            this.claerButton.TabIndex = 2;
-            this.claerButton.Text = "Clear";
-            this.claerButton.UseVisualStyleBackColor = true;
-            this.claerButton.Click += new System.EventHandler(this.claerButton_Click);
             // 
             // CDNCacheForm
             // 
@@ -174,9 +174,9 @@
         private System.Windows.Forms.Button refreshButton;
         private System.Windows.Forms.Panel panel1;
         private CDN.IPAddressControl localIpAddressControl;
-        private System.Windows.Forms.ListBox logListBox;
         public IPAddressControl remoteIpAddressControl;
         private System.Windows.Forms.Button claerButton;
+        public System.Windows.Forms.ListBox logListBox;
     }
 }
 
