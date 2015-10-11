@@ -3,14 +3,17 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Windows.Forms;
 using System.Runtime.Serialization.Formatters.Soap;
+using System.IO;
 
 namespace CDN
 {
     class CDNClient : CDNNetWork
     {
         public CDNClient(IPEndPoint point)
-            : base(point)
-        { }
+            : base(point, "./client")
+        {
+            localRoot.Scan();
+        }
 
         public CDNClient(IPEndPoint point, Form ui)
             : this(point)
@@ -30,15 +33,27 @@ namespace CDN
                         break;
                     case CDNMessage.MSGID.SHOW:
                         {                       
-                            root = Serializer<DirectoryNode>.Deserialize<SoapFormatter>(msg.content);
-                            TreeView v = (ui as CDNClientForm).list;
+                            remoteRoot = Serializer<DirectoryNode>.Deserialize<SoapFormatter>(msg.content);
+                            TreeView v = (ui as CDNClientForm).serverTreeView;
                             v.Nodes.Clear();
-                            v.Nodes.Add(root);
+                            v.Nodes.Add(remoteRoot);
                         }
                         break;
                     case CDNMessage.MSGID.DOWNLOAD:
                         {
-
+                            String fileName = msg.content.Substring(0, msg.content.IndexOf("|||"));                    
+                            String fileContent = msg.content.Substring(msg.content.IndexOf("|||") + 3);
+                            using (FileStream fs = File.Open(localRoot.info.FullName +"\\"+ fileName, FileMode.Create, FileAccess.Write))
+                            {
+                                using (StreamWriter sw = new StreamWriter(fs))
+                                {
+                                    sw.Write(fileContent);
+                                }
+                            }
+                            localRoot.Scan();
+                            TreeView v = (ui as CDNClientForm).clientTreeView;
+                            v.Nodes.Clear();
+                            v.Nodes.Add(localRoot);
                         }
                         break;
                     default:
@@ -50,7 +65,7 @@ namespace CDN
                 Console.WriteLine(e);
             }
         }
-
+        public DirectoryNode remoteRoot { get; protected set; }
         private Form ui;
     }
 }

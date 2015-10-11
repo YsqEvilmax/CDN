@@ -118,16 +118,41 @@ namespace CDN
 
     public class CDNNetWork : TcpListener
     {
-        public CDNNetWork(IPEndPoint point)
+        public CDNNetWork(IPEndPoint point, String folder = "./")
             : base(point)
         {
-            root = new DirectoryNode("./");
+            localRoot = new DirectoryNode(folder);
         }
 
         public static IPEndPoint GetLocalIPPoint()
         {
             IPAddress localAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
             return new IPEndPoint(localAddress, 0);
+        }
+
+        public void Send(IPEndPoint des, CDNMessage.MSGID msgId, String msgContent = "")
+        {
+            try
+            {
+                using (TcpClient client = new TcpClient())
+                {
+                    client.Connect(des);
+                    if (client.Connected)
+                    {
+                        NetworkStream ns = client.GetStream();
+                        using (StreamWriter sw = new StreamWriter(ns))
+                        {
+                            CDNMessage msg = new CDNMessage(this.LocalEndpoint);
+                            msg.Fill(msgId, msgContent);
+                            sw.Write(Serializer<CDNMessage>.Serialize<SoapFormatter>(msg));
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                Console.WriteLine("Fail to send" + msgId.ToString() + exp.Message);
+            }
         }
 
         public async Task Idle()
@@ -153,8 +178,8 @@ namespace CDN
         public override string ToString()
         {
             return "IP:\r\n" + base.LocalEndpoint.ToString() + "\r\n"
-                + "FileSystemDepository:\r\n" + root.ToString() + "\r\n";
+                + "FileSystemDepository:\r\n" + localRoot.ToString() + "\r\n";
         }
-        public DirectoryNode root { get; protected set; }
+        public DirectoryNode localRoot { get; protected set; }
     }
 }

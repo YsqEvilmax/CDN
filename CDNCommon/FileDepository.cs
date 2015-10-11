@@ -19,28 +19,28 @@ namespace CDN
     //    public FileSystemDepository(String path)
     //        : this()
     //    {
-    //        root = new DirectoryNode(path);
-    //        root.Scan();
+    //        localRoot = new DirectoryNode(path);
+    //        localRoot.Scan();
     //    }
 
     //    protected FileSystemDepository(SerializationInfo info, StreamingContext context)
     //    {
     //        if (info == null) { throw new System.ArgumentNullException("info"); }
-    //        this.root = info.GetValue("root", typeof(DirectoryNode)) as DirectoryNode;
+    //        this.localRoot = info.GetValue("localRoot", typeof(DirectoryNode)) as DirectoryNode;
     //    }
 
     //    public override string ToString()
     //    {
-    //        return root.ToString();
+    //        return localRoot.ToString();
     //    }
 
     //    public void GetObjectData(SerializationInfo info, StreamingContext context)
     //    {
     //        if (info == null) { throw new System.ArgumentNullException("info"); }
-    //        info.AddValue("root", this.root);
+    //        info.AddValue("localRoot", this.localRoot);
     //    }
 
-    //    public DirectoryNode root { get; protected set; }
+    //    public DirectoryNode localRoot { get; protected set; }
     //}
 
     [Serializable]
@@ -60,6 +60,21 @@ namespace CDN
             base.Serialize(si, context);
         }
 
+        public CommonNode Find(String text)
+        {
+            CommonNode node = null;
+            if(this.Text == text) { node = this; }
+            else
+            {
+                foreach (CommonNode n in Nodes)
+                {
+                    node = n.Find(text);
+                    if (node != null) break;
+                }
+            }
+            return node;
+        }
+
         public override string ToString()
         {
             String prefix = new String(' ', Level);
@@ -71,7 +86,7 @@ namespace CDN
             return result;
         }
 
-        protected FileSystemInfo info;
+        public FileSystemInfo info { get; protected set; }
     }
 
     [Serializable]
@@ -102,6 +117,7 @@ namespace CDN
 
         public void Scan()
         {
+            this.Nodes.Clear();
             //Get all the files in this directory, not these directories
             FileInfo[] fileList = (info as DirectoryInfo).GetFiles();
             foreach (FileInfo fi in fileList)

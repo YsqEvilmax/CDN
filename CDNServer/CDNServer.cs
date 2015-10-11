@@ -10,9 +10,9 @@ namespace CDN
     class CDNServer : CDNNetWork
     {
         public CDNServer(IPEndPoint point)
-            : base(point)
+            : base(point, "./server")
         {
-            root.Scan();
+            localRoot.Scan();
         }
 
         protected override async Task Handle(CDNMessage msg)
@@ -32,13 +32,22 @@ namespace CDN
                             break;
                         case CDNMessage.MSGID.SHOW:
                             {
-                                newMsg.content = Serializer<DirectoryNode>.Serialize<SoapFormatter>(root);
+                                localRoot.Scan();
+                                newMsg.content = Serializer<DirectoryNode>.Serialize<SoapFormatter>(localRoot);
                                 Console.WriteLine("{0}", newMsg.content.Length);
                             }
                             break;
                         case CDNMessage.MSGID.DOWNLOAD:
                             {
-
+                                FileNode node = Serializer<FileNode>.Deserialize<SoapFormatter>(msg.content);
+                                using (FileStream fs = File.OpenRead(node.info.FullName))
+                                {
+                                    using (StreamReader sr = new StreamReader(fs))
+                                    {
+                                        newMsg.content = node.info.Name + "|||";
+                                        newMsg.content += sr.ReadToEnd();
+                                    }
+                                }                                   
                             }
                             break;
                         default:
@@ -49,7 +58,7 @@ namespace CDN
                 }
             }
             catch(Exception e)
-            {
+           {
                 Console.WriteLine(e);
             }
         }

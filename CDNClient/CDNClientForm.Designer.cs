@@ -28,25 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listTreeView = new System.Windows.Forms.TreeView();
+            this.serverTreeView = new System.Windows.Forms.TreeView();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.connectButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.targetIPAddressControl = new CDN.IPAddressControl();
-            this.localIPAddressControl = new CDN.IPAddressControl();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.clientTreeView = new System.Windows.Forms.TreeView();
             this.refreshButton = new System.Windows.Forms.Button();
+            this.localIpAddressControl = new CDN.IPAddressControl();
+            this.remoteIpAddressControl = new CDN.IPAddressControl();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // listTreeView
+            // serverTreeView
             // 
-            this.listTreeView.Location = new System.Drawing.Point(17, 15);
-            this.listTreeView.Name = "listTreeView";
-            this.listTreeView.Size = new System.Drawing.Size(88, 276);
-            this.listTreeView.TabIndex = 0;
+            this.serverTreeView.Location = new System.Drawing.Point(17, 15);
+            this.serverTreeView.Name = "serverTreeView";
+            this.serverTreeView.Size = new System.Drawing.Size(88, 276);
+            this.serverTreeView.TabIndex = 0;
+            this.serverTreeView.DoubleClick += new System.EventHandler(this.serverFile_DbClick);
             // 
             // label1
             // 
@@ -78,42 +80,32 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.targetIPAddressControl);
-            this.panel1.Controls.Add(this.localIPAddressControl);
+            this.panel1.Controls.Add(this.remoteIpAddressControl);
+            this.panel1.Controls.Add(this.localIpAddressControl);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.connectButton);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(151, 12);
+            this.panel1.Location = new System.Drawing.Point(272, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(522, 82);
+            this.panel1.Size = new System.Drawing.Size(515, 82);
             this.panel1.TabIndex = 6;
-            // 
-            // targetIPAddressControl
-            // 
-            this.targetIPAddressControl.Location = new System.Drawing.Point(104, 47);
-            this.targetIPAddressControl.Name = "targetIPAddressControl";
-            this.targetIPAddressControl.ReadOnly = false;
-            this.targetIPAddressControl.Size = new System.Drawing.Size(319, 27);
-            this.targetIPAddressControl.TabIndex = 7;
-            this.targetIPAddressControl.Value = null;
-            // 
-            // localIPAddressControl
-            // 
-            this.localIPAddressControl.Location = new System.Drawing.Point(104, 8);
-            this.localIPAddressControl.Name = "localIPAddressControl";
-            this.localIPAddressControl.ReadOnly = false;
-            this.localIPAddressControl.Size = new System.Drawing.Size(319, 27);
-            this.localIPAddressControl.TabIndex = 6;
-            this.localIPAddressControl.Value = null;
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.clientTreeView);
             this.panel2.Controls.Add(this.refreshButton);
-            this.panel2.Controls.Add(this.listTreeView);
+            this.panel2.Controls.Add(this.serverTreeView);
             this.panel2.Location = new System.Drawing.Point(12, 12);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(123, 344);
+            this.panel2.Size = new System.Drawing.Size(208, 344);
             this.panel2.TabIndex = 7;
+            // 
+            // clientTreeView
+            // 
+            this.clientTreeView.Location = new System.Drawing.Point(111, 17);
+            this.clientTreeView.Name = "clientTreeView";
+            this.clientTreeView.Size = new System.Drawing.Size(88, 276);
+            this.clientTreeView.TabIndex = 2;
             // 
             // refreshButton
             // 
@@ -125,11 +117,29 @@
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
+            // localIpAddressControl
+            // 
+            this.localIpAddressControl.Location = new System.Drawing.Point(104, 8);
+            this.localIpAddressControl.Name = "localIpAddressControl";
+            this.localIpAddressControl.ReadOnly = false;
+            this.localIpAddressControl.Size = new System.Drawing.Size(319, 27);
+            this.localIpAddressControl.TabIndex = 6;
+            this.localIpAddressControl.Value = null;
+            // 
+            // remoteIpAddressControl
+            // 
+            this.remoteIpAddressControl.Location = new System.Drawing.Point(104, 43);
+            this.remoteIpAddressControl.Name = "remoteIpAddressControl";
+            this.remoteIpAddressControl.ReadOnly = false;
+            this.remoteIpAddressControl.Size = new System.Drawing.Size(319, 27);
+            this.remoteIpAddressControl.TabIndex = 7;
+            this.remoteIpAddressControl.Value = null;
+            // 
             // CDNClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(687, 368);
+            this.ClientSize = new System.Drawing.Size(799, 368);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "CDNClientForm";
@@ -142,16 +152,16 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TreeView listTreeView;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.Panel panel1;
-        private IPAddressControl targetIPAddressControl;
-        private IPAddressControl localIPAddressControl;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button refreshButton;
+        public System.Windows.Forms.TreeView serverTreeView;
+        public System.Windows.Forms.TreeView clientTreeView;
+        private IPAddressControl remoteIpAddressControl;
+        private IPAddressControl localIpAddressControl;
     }
 }
 
