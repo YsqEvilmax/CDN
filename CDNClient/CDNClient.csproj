@@ -55,20 +55,11 @@
     <Compile Include="CDNClientForm.Designer.cs">
       <DependentUpon>CDNClientForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IPAddressControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="IPAddressControl.Designer.cs">
-      <DependentUpon>IPAddressControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CDNClientForm.resx">
       <DependentUpon>CDNClientForm.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="IPAddressControl.resx">
-      <DependentUpon>IPAddressControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

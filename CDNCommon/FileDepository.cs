@@ -134,6 +134,23 @@ namespace CDN
                 subNode.Scan();
             }
         }
+
+        public void Clear()
+        {
+            try
+            {
+                FileInfo[] files = (info as DirectoryInfo).GetFiles();
+                foreach (FileInfo file in files)
+                {
+                    File.Delete(file.FullName);
+                }
+                Scan();
+            }
+            catch (Exception exp)
+            {
+                Console.WriteLine(exp);
+            }
+        }
     }
 
     [Serializable]

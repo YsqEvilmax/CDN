@@ -19,43 +19,36 @@ namespace CDN
         {
             try
             {
-                TcpClient client = new TcpClient(msg.address, msg.port);
-                CDNMessage newMsg = msg.Clone() as CDNMessage;            
-                NetworkStream ns = client.GetStream();
-                using (StreamWriter sw = new StreamWriter(ns))
+                String content = "";
+                switch (msg.id)
                 {
-                    switch (msg.id)
-                    {
-                        case CDNMessage.MSGID.TEST:
+                    case CDNMessage.MSGID.TEST:
+                        {
+                        }
+                        break;
+                    case CDNMessage.MSGID.SHOW:
+                        {
+                            localRoot.Scan();
+                            content = Serializer<DirectoryNode>.Serialize<SoapFormatter>(localRoot);
+                        }
+                        break;
+                    case CDNMessage.MSGID.DOWNLOAD:
+                        {
+                            FileNode node = Serializer<FileNode>.Deserialize<SoapFormatter>(msg.content);
+                            using (FileStream fs = File.OpenRead(node.info.FullName))
                             {
-                            }
-                            break;
-                        case CDNMessage.MSGID.SHOW:
-                            {
-                                localRoot.Scan();
-                                newMsg.content = Serializer<DirectoryNode>.Serialize<SoapFormatter>(localRoot);
-                                Console.WriteLine("{0}", newMsg.content.Length);
-                            }
-                            break;
-                        case CDNMessage.MSGID.DOWNLOAD:
-                            {
-                                FileNode node = Serializer<FileNode>.Deserialize<SoapFormatter>(msg.content);
-                                using (FileStream fs = File.OpenRead(node.info.FullName))
+                                using (StreamReader sr = new StreamReader(fs))
                                 {
-                                    using (StreamReader sr = new StreamReader(fs))
-                                    {
-                                        newMsg.content = node.info.Name + "|||";
-                                        newMsg.content += sr.ReadToEnd();
-                                    }
-                                }                                   
+                                    content = node.info.Name + "|||";
+                                    content += sr.ReadToEnd();
+                                }
                             }
-                            break;
-                        default:
-                            break;
-                    }
-                    String context = Serializer<CDNMessage>.Serialize<SoapFormatter>(newMsg);
-                    sw.Write(context);
+                        }
+                        break;
+                    default:
+                        break;
                 }
+                Send(new IPEndPoint(IPAddress.Parse(msg.address), msg.port), msg.id, content);
             }
             catch(Exception e)
            {

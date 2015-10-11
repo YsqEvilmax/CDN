@@ -155,6 +155,30 @@ namespace CDN
             }
         }
 
+        public void Forward(IPEndPoint des, CDNMessage msg)
+        {
+            try
+            {
+                using (TcpClient client = new TcpClient())
+                {
+                    client.Connect(des);
+                    if (client.Connected)
+                    {
+                        NetworkStream ns = client.GetStream();
+                        using (StreamWriter sw = new StreamWriter(ns))
+                        {
+                            CDNMessage copyMsg = msg.Clone() as CDNMessage;
+                            sw.Write(Serializer<CDNMessage>.Serialize<SoapFormatter>(copyMsg));
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                Console.WriteLine("Fail to send" + msg.id.ToString() + exp.Message);
+            }
+        }
+
         public async Task Idle()
         {
             while (true)

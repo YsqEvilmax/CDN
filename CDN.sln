@@ -8,17 +8,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNClient", "CDNClient\CDNC
 		{E5960229-9F78-4AF2-8E72-77056E3891A8} = {E5960229-9F78-4AF2-8E72-77056E3891A8}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNCache", "CDNCache\CDNCache.csproj", "{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{E5960229-9F78-4AF2-8E72-77056E3891A8} = {E5960229-9F78-4AF2-8E72-77056E3891A8}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNServer", "CDNServer\CDNServer.csproj", "{77F2947D-5969-4600-A932-8C67DA8E522F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E5960229-9F78-4AF2-8E72-77056E3891A8} = {E5960229-9F78-4AF2-8E72-77056E3891A8}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNCommon", "CDNCommon\CDNCommon.csproj", "{E5960229-9F78-4AF2-8E72-77056E3891A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNCache", "CDNCache\CDNCache.csproj", "{62265BF7-13D6-4CC6-AC5A-99D79E406C69}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E5960229-9F78-4AF2-8E72-77056E3891A8} = {E5960229-9F78-4AF2-8E72-77056E3891A8}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,10 +30,6 @@ Global
 		{48F14FB1-356C-4A09-8477-76515430282D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48F14FB1-356C-4A09-8477-76515430282D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48F14FB1-356C-4A09-8477-76515430282D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7AE3F885-E805-4E01-ADBC-4CEB53C2EC0A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{77F2947D-5969-4600-A932-8C67DA8E522F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{77F2947D-5969-4600-A932-8C67DA8E522F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77F2947D-5969-4600-A932-8C67DA8E522F}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -42,6 +38,10 @@ Global
 		{E5960229-9F78-4AF2-8E72-77056E3891A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5960229-9F78-4AF2-8E72-77056E3891A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5960229-9F78-4AF2-8E72-77056E3891A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62265BF7-13D6-4CC6-AC5A-99D79E406C69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62265BF7-13D6-4CC6-AC5A-99D79E406C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62265BF7-13D6-4CC6-AC5A-99D79E406C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62265BF7-13D6-4CC6-AC5A-99D79E406C69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

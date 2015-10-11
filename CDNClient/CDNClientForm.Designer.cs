@@ -39,6 +39,7 @@
             this.fileTextBox = new System.Windows.Forms.TextBox();
             this.remoteIpAddressControl = new CDN.IPAddressControl();
             this.localIpAddressControl = new CDN.IPAddressControl();
+            this.clearButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -47,7 +48,7 @@
             // 
             this.serverTreeView.Location = new System.Drawing.Point(17, 15);
             this.serverTreeView.Name = "serverTreeView";
-            this.serverTreeView.Size = new System.Drawing.Size(88, 276);
+            this.serverTreeView.Size = new System.Drawing.Size(88, 297);
             this.serverTreeView.TabIndex = 0;
             this.serverTreeView.DoubleClick += new System.EventHandler(this.serverFile_DbClick);
             // 
@@ -93,6 +94,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.clearButton);
             this.panel2.Controls.Add(this.clientTreeView);
             this.panel2.Controls.Add(this.refreshButton);
             this.panel2.Controls.Add(this.serverTreeView);
@@ -105,13 +107,13 @@
             // 
             this.clientTreeView.Location = new System.Drawing.Point(111, 17);
             this.clientTreeView.Name = "clientTreeView";
-            this.clientTreeView.Size = new System.Drawing.Size(88, 276);
+            this.clientTreeView.Size = new System.Drawing.Size(88, 295);
             this.clientTreeView.TabIndex = 2;
             this.clientTreeView.DoubleClick += new System.EventHandler(this.displayFile_DbClick);
             // 
             // refreshButton
             // 
-            this.refreshButton.Location = new System.Drawing.Point(17, 305);
+            this.refreshButton.Location = new System.Drawing.Point(17, 318);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(88, 23);
             this.refreshButton.TabIndex = 1;
@@ -131,7 +133,7 @@
             // 
             // remoteIpAddressControl
             // 
-            this.remoteIpAddressControl.Location = new System.Drawing.Point(104, 43);
+            this.remoteIpAddressControl.Location = new System.Drawing.Point(99, 43);
             this.remoteIpAddressControl.Name = "remoteIpAddressControl";
             this.remoteIpAddressControl.ReadOnly = false;
             this.remoteIpAddressControl.Size = new System.Drawing.Size(319, 27);
@@ -140,12 +142,22 @@
             // 
             // localIpAddressControl
             // 
-            this.localIpAddressControl.Location = new System.Drawing.Point(104, 8);
+            this.localIpAddressControl.Location = new System.Drawing.Point(99, 10);
             this.localIpAddressControl.Name = "localIpAddressControl";
-            this.localIpAddressControl.ReadOnly = false;
+            this.localIpAddressControl.ReadOnly = true;
             this.localIpAddressControl.Size = new System.Drawing.Size(319, 27);
             this.localIpAddressControl.TabIndex = 6;
             this.localIpAddressControl.Value = null;
+            // 
+            // clearButton
+            // 
+            this.clearButton.Location = new System.Drawing.Point(111, 319);
+            this.clearButton.Name = "clearButton";
+            this.clearButton.Size = new System.Drawing.Size(88, 23);
+            this.clearButton.TabIndex = 3;
+            this.clearButton.Text = "Clear";
+            this.clearButton.UseVisualStyleBackColor = true;
+            this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
             // CDNClientForm
             // 
@@ -156,7 +168,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "CDNClientForm";
-            this.Text = "CDNClientForm";
+            this.Text = "CDNClient";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -174,9 +186,10 @@
         private System.Windows.Forms.Button refreshButton;
         public System.Windows.Forms.TreeView serverTreeView;
         public System.Windows.Forms.TreeView clientTreeView;
+        private System.Windows.Forms.TextBox fileTextBox;
         private IPAddressControl remoteIpAddressControl;
         private IPAddressControl localIpAddressControl;
-        private System.Windows.Forms.TextBox fileTextBox;
+        private System.Windows.Forms.Button clearButton;
     }
 }
 
