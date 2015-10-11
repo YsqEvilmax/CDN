@@ -15,7 +15,7 @@ namespace CDN
 
         private readonly byte[] buffer;
 
-        private ulong POLY = 69069;
+        private ulong POLY = 0x0060034000F0D50A;
 
         private readonly ulong[] table32, table40, table48, table54;
         private readonly ulong[] table62, table70, table78, table84;

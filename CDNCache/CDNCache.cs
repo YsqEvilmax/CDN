@@ -65,29 +65,27 @@ namespace CDN
                     break;
                 case CDNMessage.MSGID.DOWNLOAD:
                     {
-                        //FileNode node = Serializer<FileNode>.Deserialize<SoapFormatter>(msg.content);
-                        //(ui as CDNCacheForm).logListBox.Items.Add("User request: file " + node.info.Name + " at " + DateTime.Now);
-                        //FileNode localNode = localRoot.Find(node.Text) as FileNode;
-                        //if (localNode != null)
-                        //{
-                        //    using (FileStream fs = File.OpenRead(localNode.info.FullName))
-                        //    {
-                        //        using (StreamReader sr = new StreamReader(fs))
-                        //        {
-                        //            msg.content = localNode.info.Name + "|||" + sr.ReadToEnd();
+                        FileNode node = Serializer<FileNode>.Deserialize<SoapFormatter>(msg.content);
+                        (ui as CDNCacheForm).logListBox.Items.Add("User request: file " + node.info.Name + " at " + DateTime.Now);
+                        FileNode localNode = localRoot.Find(node.Text) as FileNode;
+                        if (localNode != null)
+                        {
+                            using (FileStream fs = File.OpenRead(localNode.info.FullName))
+                            {
+                                using (StreamReader sr = new StreamReader(fs))
+                                {
+                                    msg.content = localNode.info.Name + "|||" + sr.ReadToEnd();
 
-                        //            Send(new IPEndPoint(IPAddress.Parse(msg.From().address), msg.From().port), msg);
-                        //        }
-                        //    }
-                        //    (ui as CDNCacheForm).logListBox.Items.Add("Response: cached file " + localNode.info.Name);
-                        //}
-                        //else
-                        //{
-                        //    Send((ui as CDNCacheForm).remoteIpAddressControl.Value, msg);
-                        //    (ui as CDNCacheForm).logListBox.Items.Add("Response: file " + node.info.Name + "downloaded from the server");
-                        //}   
-                        msg.id = CDNMessage.MSGID.PREPARE;
-                        Send((ui as CDNCacheForm).remoteIpAddressControl.Value, msg);
+                                    Send(new IPEndPoint(IPAddress.Parse(msg.From().address), msg.From().port), msg);
+                                }
+                            }
+                            (ui as CDNCacheForm).logListBox.Items.Add("Response: cached file " + localNode.info.Name);
+                        }
+                        else
+                        {
+                            Send((ui as CDNCacheForm).remoteIpAddressControl.Value, msg);
+                            (ui as CDNCacheForm).logListBox.Items.Add("Response: file " + node.info.Name + "downloaded from the server");
+                        }
                     }
                     break;
 
@@ -113,46 +111,20 @@ namespace CDN
                     break;
                 case CDNMessage.MSGID.DOWNLOAD:
                     {
-                        //download the fragments
-                        Block newBlock = Serializer<Block>.Deserialize<SoapFormatter>(msg.content);
-                        using (FileStream fs = new FileStream(localRoot.FullPath + "\\" + newBlock.name, FileMode.Create, FileAccess.Write))
+                        String fileName = msg.content.Substring(0, msg.content.IndexOf("|||"));
+                        String fileContent = msg.content.Substring(msg.content.IndexOf("|||") + 3);
+                        using (FileStream fs = new FileStream(localRoot.info.FullName + "\\" + fileName, FileMode.Create, FileAccess.Write))
                         {
                             using (StreamWriter sw = new StreamWriter(fs))
                             {
-                                sw.Write(newBlock.content);
+                                sw.Write(fileContent);
                             }
                         }
-                    }
-                    break;
-                case CDNMessage.MSGID.PREPARE:
-                    {
-                        FileNode node = Serializer<FileNode>.Deserialize<SoapFormatter>(msg.content);
-                        msg.id = CDNMessage.MSGID.DOWNLOAD;
-                        List<String> cacheNeed = Ready(node.fileTemplate);
-                        if (cacheNeed.Count == 0)
-                        {
-                             msg.content = node.Text + "|||";
-                            foreach(String s in node.fileTemplate)
-                            {
-                                using (FileStream fs = File.OpenRead(localRoot.FullPath + "\\" + s))
-                                {
-                                    using (StreamReader sr = new StreamReader(fs))
-                                    {
-                                        msg.content += sr.ReadToEnd();
-                                    }
-                                }
-                            }
-                            Send(new IPEndPoint(IPAddress.Parse(msg.To().address), msg.To().port), msg);
-                            (ui as CDNCacheForm).logListBox.Items.Add("User request: file " + node.info.Name + " at " + DateTime.Now);
-                            (ui as CDNCacheForm).logListBox.Items.Add("Response:" + node.cachedPercentage.ToString("P") 
-                                + " of file " + node.info.Name + " was constructed with cached data");
-                        }
-                        else
-                        {
-                            node.fileTemplate = cacheNeed;                    
-                            msg.content = Serializer<FileNode>.Serialize<SoapFormatter>(node);
-                            Send((ui as CDNCacheForm).remoteIpAddressControl.Value, msg);
-                        }
+                        localRoot.Scan();
+                        TreeView v = (ui as CDNCacheForm).clientTreeView;
+                        v.Nodes.Clear();
+                        v.Nodes.Add(localRoot);
+                        Send(new IPEndPoint(IPAddress.Parse(msg.To().address), msg.To().port), msg);
                     }
                     break;
                 default:
@@ -166,10 +138,10 @@ namespace CDN
             List<String> fegments = new List<string>();
             foreach (TreeNode t in localRoot.Nodes)
             {
-                fegments.Add(t.Text);
+                fegments.Add(t.Name);
             }
-            List<String> cacheNeed = template.Except(fegments).ToList();
-            return cacheNeed;
+            List<String> cacheHave = template.Intersect(fegments).ToList();
+            return cacheHave;
         }
         private Form ui;
     }

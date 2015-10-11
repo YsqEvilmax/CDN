@@ -64,7 +64,7 @@ namespace CDN
     [Serializable]
     public class CDNMessage : ISerializable, ICloneable
     {
-        public enum MSGID : int { TEST, SHOW, DOWNLOAD, PREPARE};
+        public enum MSGID : int { TEST, SHOW, DOWNLOAD};
 
         public CDNMessage()
         {
