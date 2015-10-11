@@ -39,8 +39,6 @@ namespace CDN
             server.Send(remoteIpAddressControl.Value, CDNMessage.MSGID.SHOW);
         }
 
-        private CDNClient server;
-
         private void serverFile_DbClick(object sender, EventArgs e)
         {
             if(serverTreeView.SelectedNode is FileNode)
@@ -50,5 +48,29 @@ namespace CDN
                     Serializer<FileNode>.Serialize<SoapFormatter>(serverTreeView.SelectedNode as FileNode));
             }
         }
+
+        private void displayFile_DbClick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (clientTreeView.SelectedNode is FileNode)
+                {
+                    using (FileStream fs = new FileStream((clientTreeView.SelectedNode as FileNode).info.FullName, FileMode.Open, FileAccess.Read))
+                    {
+                        using (StreamReader sr = new StreamReader(fs))
+                        {
+                            string content = sr.ReadToEnd();
+                            this.fileTextBox.Text = content;
+                        }
+                    }
+                }
+            }
+            catch(Exception exp)
+            {
+                MessageBox.Show(exp.ToString());
+            }
+        }
+
+        private CDNClient server;
     }
 }

@@ -36,8 +36,9 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.clientTreeView = new System.Windows.Forms.TreeView();
             this.refreshButton = new System.Windows.Forms.Button();
-            this.localIpAddressControl = new CDN.IPAddressControl();
+            this.fileTextBox = new System.Windows.Forms.TextBox();
             this.remoteIpAddressControl = new CDN.IPAddressControl();
+            this.localIpAddressControl = new CDN.IPAddressControl();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -85,7 +86,7 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.connectButton);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(272, 12);
+            this.panel1.Location = new System.Drawing.Point(226, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(515, 82);
             this.panel1.TabIndex = 6;
@@ -106,6 +107,7 @@
             this.clientTreeView.Name = "clientTreeView";
             this.clientTreeView.Size = new System.Drawing.Size(88, 276);
             this.clientTreeView.TabIndex = 2;
+            this.clientTreeView.DoubleClick += new System.EventHandler(this.displayFile_DbClick);
             // 
             // refreshButton
             // 
@@ -117,14 +119,15 @@
             this.refreshButton.UseVisualStyleBackColor = true;
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
-            // localIpAddressControl
+            // fileTextBox
             // 
-            this.localIpAddressControl.Location = new System.Drawing.Point(104, 8);
-            this.localIpAddressControl.Name = "localIpAddressControl";
-            this.localIpAddressControl.ReadOnly = false;
-            this.localIpAddressControl.Size = new System.Drawing.Size(319, 27);
-            this.localIpAddressControl.TabIndex = 6;
-            this.localIpAddressControl.Value = null;
+            this.fileTextBox.Location = new System.Drawing.Point(227, 101);
+            this.fileTextBox.Multiline = true;
+            this.fileTextBox.Name = "fileTextBox";
+            this.fileTextBox.ReadOnly = true;
+            this.fileTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.fileTextBox.Size = new System.Drawing.Size(514, 255);
+            this.fileTextBox.TabIndex = 8;
             // 
             // remoteIpAddressControl
             // 
@@ -135,11 +138,21 @@
             this.remoteIpAddressControl.TabIndex = 7;
             this.remoteIpAddressControl.Value = null;
             // 
+            // localIpAddressControl
+            // 
+            this.localIpAddressControl.Location = new System.Drawing.Point(104, 8);
+            this.localIpAddressControl.Name = "localIpAddressControl";
+            this.localIpAddressControl.ReadOnly = false;
+            this.localIpAddressControl.Size = new System.Drawing.Size(319, 27);
+            this.localIpAddressControl.TabIndex = 6;
+            this.localIpAddressControl.Value = null;
+            // 
             // CDNClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(799, 368);
+            this.ClientSize = new System.Drawing.Size(751, 368);
+            this.Controls.Add(this.fileTextBox);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "CDNClientForm";
@@ -148,6 +161,7 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -162,6 +176,7 @@
         public System.Windows.Forms.TreeView clientTreeView;
         private IPAddressControl remoteIpAddressControl;
         private IPAddressControl localIpAddressControl;
+        private System.Windows.Forms.TextBox fileTextBox;
     }
 }
 

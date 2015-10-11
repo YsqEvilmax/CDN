@@ -43,7 +43,7 @@ namespace CDN
                         {
                             String fileName = msg.content.Substring(0, msg.content.IndexOf("|||"));                    
                             String fileContent = msg.content.Substring(msg.content.IndexOf("|||") + 3);
-                            using (FileStream fs = File.Open(localRoot.info.FullName +"\\"+ fileName, FileMode.Create, FileAccess.Write))
+                            using (FileStream fs = new FileStream(localRoot.info.FullName +"\\"+ fileName, FileMode.Create, FileAccess.Write))
                             {
                                 using (StreamWriter sw = new StreamWriter(fs))
                                 {
