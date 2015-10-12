@@ -31,21 +31,26 @@ namespace CDN
 
         private void connectButton_Click(object sender, EventArgs e)
         {
-            server.Send(remoteIpAddressControl.Value, CDNMessage.MSGID.TEST);
+            CDNMessage msg = new CDNMessage();
+            msg.Fill(CDNMessage.MSGID.TEST);
+            server.Send(remoteIpAddressControl.Value, msg);
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
-            server.Send(remoteIpAddressControl.Value, CDNMessage.MSGID.SHOW);
+            CDNMessage msg = new CDNMessage();
+            msg.Fill(CDNMessage.MSGID.SHOW);
+            server.Send(remoteIpAddressControl.Value, msg);
         }
 
         private void serverFile_DbClick(object sender, EventArgs e)
         {
             if(serverTreeView.SelectedNode is FileNode)
             {
-                server.Send(remoteIpAddressControl.Value, 
-                    CDNMessage.MSGID.DOWNLOAD,
+                CDNMessage msg = new CDNMessage();
+                msg.Fill(CDNMessage.MSGID.DOWNLOAD, 
                     Serializer<FileNode>.Serialize<SoapFormatter>(serverTreeView.SelectedNode as FileNode));
+                server.Send(remoteIpAddressControl.Value, msg);
             }
         }
 

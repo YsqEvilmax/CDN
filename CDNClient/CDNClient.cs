@@ -12,6 +12,7 @@ namespace CDN
         public CDNClient(IPEndPoint point)
             : base(point, "./client")
         {
+            type = CNDTYPE.CLIENT;
             localRoot.Scan();
         }
 

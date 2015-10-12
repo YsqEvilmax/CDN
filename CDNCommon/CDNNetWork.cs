@@ -16,20 +16,58 @@ using System.Xml.Serialization;
 namespace CDN
 {
     [Serializable]
+    public class AddressAndPort : ISerializable
+    {
+        public AddressAndPort()
+        { }
+
+        public AddressAndPort(String add, int port)
+            : this()
+        {
+            this.address = add;
+            this.port = port;
+        }
+
+        public AddressAndPort(EndPoint point)
+            : this()
+        {
+            String[] ip = point.ToString().Split(':');
+            address = ip[0];
+            port = int.Parse(ip[1]);
+        }
+        #region Serialization Control
+        //This function is necessary for soap Deserialization
+        protected AddressAndPort(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) { throw new System.ArgumentNullException("info"); }
+            this.address = info.GetString("address");
+            this.port = info.GetInt32("port");
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null) { throw new System.ArgumentNullException("info"); }
+            info.AddValue("address", this.address);
+            info.AddValue("port", this.port);
+        }
+        #endregion
+
+        public override string ToString()
+        {
+            return address + ":" + port.ToString();
+        }
+
+        public String address { get; set; }
+        public int port { get; set; }
+    }
+
+    [Serializable]
     public class CDNMessage : ISerializable, ICloneable
     {
         public enum MSGID : int { TEST, SHOW, DOWNLOAD };
 
         public CDNMessage()
         {
-        }
-
-        public CDNMessage(EndPoint point)
-            : this()
-        {
-            String[] ip = point.ToString().Split(':');
-            this.address = ip[0];
-            this.port = int.Parse(ip[1]);
         }
 
         #region Serialization Control
@@ -39,8 +77,11 @@ namespace CDN
             if (info == null) { throw new System.ArgumentNullException("info"); }
             this.id = (MSGID)info.GetUInt32("id");
             this.content = info.GetString("content");
-            this.address = info.GetString("address");
-            this.port = info.GetInt32("port");
+            this.from = (CDNNetWork.CNDTYPE)info.GetUInt32("from");
+            this.to = (CDNNetWork.CNDTYPE)info.GetUInt32("to");
+            this.client = info.GetValue("client", typeof(AddressAndPort)) as AddressAndPort;
+            this.cache = info.GetValue("cache", typeof(AddressAndPort)) as AddressAndPort;
+            this.server = info.GetValue("server", typeof(AddressAndPort)) as AddressAndPort;
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -48,12 +89,15 @@ namespace CDN
             if (info == null) { throw new System.ArgumentNullException("info"); }
             info.AddValue("id", this.id);
             info.AddValue("content", this.content);
-            info.AddValue("address", this.address);
-            info.AddValue("port", this.port);
+            info.AddValue("from", this.from);
+            info.AddValue("to", this.to);
+            info.AddValue("client", this.client);
+            info.AddValue("cache", this.cache);
+            info.AddValue("server", this.server);
         }
         #endregion
 
-        public void Fill(MSGID id, String content)
+        public void Fill(MSGID id, String content = "")
         {
             this.id = id;
             this.content = content;
@@ -64,15 +108,77 @@ namespace CDN
             CDNMessage msg = new CDNMessage();
             msg.id = this.id;
             msg.content = this.content;
-            msg.address = this.address;
-            msg.port = this.port;
+            msg.client = this.client;
+            msg.cache = this.cache;
+            msg.server = this.server;
+            msg.from = this.from;
+            msg.to = this.to;
             return msg;
+        }
+
+        public void AddressUpdate(CDNNetWork sr)
+        {
+            switch (sr.type)
+            {
+                case CDNNetWork.CNDTYPE.CLIENT:
+                    client = new AddressAndPort(sr.LocalEndpoint);
+                    break;
+                case CDNNetWork.CNDTYPE.CACHE:
+                    cache = new AddressAndPort(sr.LocalEndpoint);
+                    break;
+                case CDNNetWork.CNDTYPE.SERVER:
+                    server = new AddressAndPort(sr.LocalEndpoint);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public AddressAndPort From()
+        {
+            switch (from)
+            {
+                case CDNNetWork.CNDTYPE.CLIENT:
+                    return client;
+                    break;
+                case CDNNetWork.CNDTYPE.CACHE:
+                    return cache;
+                    break;
+                case CDNNetWork.CNDTYPE.SERVER:
+                    return server;
+                    break;
+                default:
+                    break;
+            }
+            return null;
+        }
+
+        public AddressAndPort To()
+        {
+            switch (to)
+            {
+                case CDNNetWork.CNDTYPE.CLIENT:
+                    return client;
+                    break;
+                case CDNNetWork.CNDTYPE.CACHE:
+                    return cache;
+                    break;
+                case CDNNetWork.CNDTYPE.SERVER:
+                    return server;
+                    break;
+                default:
+                    break;
+            }
+            return null;
         }
 
         public MSGID id { get; set; }
         public String content { get; set; }
-        public String address { get; set; }
-        public int port { get; set; }
+        public CDNNetWork.CNDTYPE from { get; set; }
+        public CDNNetWork.CNDTYPE to { get; set; }
+        private AddressAndPort client;
+        private AddressAndPort cache;
+        private AddressAndPort server;
     }
 
     public class Serializer<T>
@@ -118,9 +224,12 @@ namespace CDN
 
     public class CDNNetWork : TcpListener
     {
+        public enum CNDTYPE : int { CLIENT, SERVER, CACHE, UNKNOWN }
+
         public CDNNetWork(IPEndPoint point, String folder = "./")
             : base(point)
         {
+            name = folder;
             localRoot = new DirectoryNode(folder);
         }
 
@@ -130,7 +239,7 @@ namespace CDN
             return new IPEndPoint(localAddress, 0);
         }
 
-        public void Send(IPEndPoint des, CDNMessage.MSGID msgId, String msgContent = "")
+        public void Send(IPEndPoint des, CDNMessage msg)
         {
             try
             {
@@ -142,16 +251,17 @@ namespace CDN
                         NetworkStream ns = client.GetStream();
                         using (StreamWriter sw = new StreamWriter(ns))
                         {
-                            CDNMessage msg = new CDNMessage(this.LocalEndpoint);
-                            msg.Fill(msgId, msgContent);
-                            sw.Write(Serializer<CDNMessage>.Serialize<SoapFormatter>(msg));
+                            CDNMessage newMsg = msg.Clone() as CDNMessage;
+                            newMsg.from = this.type;
+                            newMsg.AddressUpdate(this);
+                            sw.Write(Serializer<CDNMessage>.Serialize<SoapFormatter>(newMsg));
                         }
                     }
                 }
             }
             catch (Exception exp)
             {
-                Console.WriteLine("Fail to send" + msgId.ToString() + exp.Message);
+                Console.WriteLine("Fail to send" + msg.ToString() + exp.Message);
             }
         }
 
@@ -189,6 +299,8 @@ namespace CDN
                 {
                     String context = await sr.ReadToEndAsync();
                     CDNMessage msg = Serializer<CDNMessage>.Deserialize<SoapFormatter>(context);
+                    msg.to = this.type;
+                    msg.AddressUpdate(this);
                     Handle(msg);
                 }
             }
@@ -205,5 +317,7 @@ namespace CDN
                 + "FileSystemDepository:\r\n" + localRoot.ToString() + "\r\n";
         }
         public DirectoryNode localRoot { get; protected set; }
+        public String name { get; protected set; }
+        public CNDTYPE type { get; protected set; }
     }
 }

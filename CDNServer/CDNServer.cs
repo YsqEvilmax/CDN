@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Soap;
+using System.Linq;
 
 namespace CDN
 {
@@ -12,6 +13,7 @@ namespace CDN
         public CDNServer(IPEndPoint point)
             : base(point, "./server")
         {
+            type = CNDTYPE.SERVER;
             localRoot.Scan();
         }
 
@@ -48,7 +50,9 @@ namespace CDN
                     default:
                         break;
                 }
-                Send(new IPEndPoint(IPAddress.Parse(msg.address), msg.port), msg.id, content);
+                CDNMessage newMsg = msg.Clone() as CDNMessage;
+                newMsg.Fill(msg.id, content);
+                Send(new IPEndPoint(IPAddress.Parse(msg.From().address), msg.From().port), newMsg);
             }
             catch(Exception e)
            {
