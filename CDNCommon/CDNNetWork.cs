@@ -64,7 +64,7 @@ namespace CDN
     [Serializable]
     public class CDNMessage : ISerializable, ICloneable
     {
-        public enum MSGID : int { TEST, SHOW, DOWNLOAD };
+        public enum MSGID : int { TEST, SHOW, DOWNLOAD, PREPARE};
 
         public CDNMessage()
         {
@@ -262,30 +262,6 @@ namespace CDN
             catch (Exception exp)
             {
                 Console.WriteLine("Fail to send" + msg.ToString() + exp.Message);
-            }
-        }
-
-        public void Forward(IPEndPoint des, CDNMessage msg)
-        {
-            try
-            {
-                using (TcpClient client = new TcpClient())
-                {
-                    client.Connect(des);
-                    if (client.Connected)
-                    {
-                        NetworkStream ns = client.GetStream();
-                        using (StreamWriter sw = new StreamWriter(ns))
-                        {
-                            CDNMessage copyMsg = msg.Clone() as CDNMessage;
-                            sw.Write(Serializer<CDNMessage>.Serialize<SoapFormatter>(copyMsg));
-                        }
-                    }
-                }
-            }
-            catch (Exception exp)
-            {
-                Console.WriteLine("Fail to send" + msg.id.ToString() + exp.Message);
             }
         }
 
