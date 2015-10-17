@@ -174,10 +174,10 @@ namespace CDN
             si.AddValue("cachedPercentage", this.cachedPercentage);
         }
 
-        private readonly static int windowSize = 3;
         public List<Block> Partition()
         {
             List<Block> result = new List<Block>();
+            fileTemplate.Clear();
             using (FileStream fs = File.OpenRead(info.FullName))
             {
                 using (StreamReader sr = new StreamReader(fs))
@@ -221,7 +221,6 @@ namespace CDN
             return result;
         }
 
-        //public String fileTemplate { get; private set; }
         public List<String> fileTemplate { get; set; }
         public double cachedPercentage { get; set; }
 
