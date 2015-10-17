@@ -209,9 +209,9 @@ namespace CDN
                         Block b = new Block(this, content.Substring((int)s.Offset, (int)s.Length));
                         b.percentage = (double)b.content.Length / content.Length;
                         result.Add(b);
-                        if(!fileTemplate.Contains(b.ToString()))
+                        if(!fileTemplate.Contains(b.name))
                         {
-                            fileTemplate.Add(b.ToString());
+                            fileTemplate.Add(b.name);
                         }
                     }
                 }
