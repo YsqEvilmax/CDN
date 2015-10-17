@@ -146,7 +146,7 @@ namespace CDN
         public FileNode()
             : base()
         {
-            cachedPercentage = -1;
+            cachedPercentage = 1;
             fileTemplate = new List<string>();
         }
 
