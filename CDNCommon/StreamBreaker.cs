@@ -26,7 +26,7 @@ namespace CDN
   {
     private const int width = 64;  //--> the # of bytes in the window
     private const long seed = 69069;  //--> a our hash seed
-    private const long mask = ( 1 << 16 ) - 1;  //--> a hash seive: 16 gets you ~64k chunks
+    private const long mask = ( 1 << 13 ) - 1;  //--> a hash seive: 16 gets you ~64k chunks
     private const int bufferSize = 64 * 1024;
     private static object sync = new object( );
 

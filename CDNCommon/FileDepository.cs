@@ -207,6 +207,7 @@ namespace CDN
                     foreach (StreamBreaker.Segment s in container)
                     {
                         Block b = new Block(this, content.Substring((int)s.Offset, (int)s.Length));
+                        b.offset = (int)s.Offset;
                         b.percentage = (double)b.content.Length / content.Length;
                         result.Add(b);
                         if(!fileTemplate.Contains(b.name))
@@ -250,6 +251,7 @@ namespace CDN
             this.percentage = info.GetDouble("percentage");
             this.content = info.GetString("content");
             this.parent = info.GetValue("parent", typeof(FileNode)) as FileNode;
+            this.offset = info.GetInt32("offset");
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -259,6 +261,7 @@ namespace CDN
             info.AddValue("percentage", this.percentage);
             info.AddValue("content", this.content);
             info.AddValue("parent", this.parent);
+            info.AddValue("offset", this.offset);
         }
         #endregion
 
@@ -270,6 +273,7 @@ namespace CDN
 
         public FileNode parent { get; private set; }
 
+        public int offset { get; set;}
 
         public override string ToString()
         {
