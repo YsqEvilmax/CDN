@@ -61,7 +61,7 @@ namespace CDN
                     case CDNMessage.MSGID.DOWNLOAD:
                         {
                             FileNode node = Serializer<FileNode>.Deserialize<SoapFormatter>(msg.content);
-                            List<String> cacheHave = node.fileTemplate;
+                            List<String> cacheHave = node.fileTemplate.ToList();
                             List<Block> segments = node.Partition();
                             //require a template to compare
                             //reqire the rest blocks

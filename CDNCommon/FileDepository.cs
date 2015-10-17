@@ -224,7 +224,7 @@ namespace CDN
             this.content = content;
             MD5 md5 = new MD5CryptoServiceProvider();
             byte[] result = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(content));
-            name = System.Text.Encoding.UTF8.GetString(result);
+            name = "Segment"+System.Text.Encoding.UTF8.GetString(result)+".part";
         }
         #region Serialization Control
         //This function is necessary for soap Deserialization
