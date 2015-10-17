@@ -85,7 +85,6 @@ namespace CDN
                             FileNode node = Serializer<FileNode>.Deserialize<SoapFormatter>(msg.content);
                             node.Partition();
                             content = Serializer<FileNode>.Serialize<SoapFormatter>(node);
-                            FileNode x = Serializer<FileNode>.Deserialize<SoapFormatter>(content);
                         }
                         break;
                     default:
