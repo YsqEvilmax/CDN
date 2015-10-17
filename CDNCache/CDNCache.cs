@@ -131,10 +131,10 @@ namespace CDN
                         List<String> cacheNeed = Ready(node.fileTemplate);
                         if (cacheNeed.Count == 0)
                         {
-                            msg.content = node.Name;
+                             msg.content = node.Text + "|||";
                             foreach(String s in node.fileTemplate)
                             {
-                                using (FileStream fs = File.OpenRead(s))
+                                using (FileStream fs = File.OpenRead(localRoot.FullPath + "\\" + s))
                                 {
                                     using (StreamReader sr = new StreamReader(fs))
                                     {
