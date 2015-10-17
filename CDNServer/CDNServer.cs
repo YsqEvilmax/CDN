@@ -61,12 +61,11 @@ namespace CDN
                     case CDNMessage.MSGID.DOWNLOAD:
                         {
                             FileNode node = Serializer<FileNode>.Deserialize<SoapFormatter>(msg.content);
-                            List<String> cacheHave = node.fileTemplate.ToList();
+                            List<String> cacheRequire = node.fileTemplate.ToList();
                             List<Block> segments = node.Partition();
                             //require a template to compare
                             //reqire the rest blocks
-                            List<String> cacheNotHave = node.fileTemplate.Except(cacheHave).ToList();
-                            List<Block> cacheNeed = segments.Where(x => cacheNotHave.Exists(y => y == x.name)).ToList();
+                            List<Block> cacheNeed = segments.Where(x => cacheRequire.Exists(y => y == x.name)).ToList();
                             //if (node.cachedPercentage < 0) { node.cachedPercentage = 1 - cacheNeed.Sum(x => x.percentage); }
                             foreach (Block b in cacheNeed)
                             {
@@ -75,6 +74,7 @@ namespace CDN
                                 additionMsg.Fill(CDNMessage.MSGID.DOWNLOAD, Serializer<Block>.Serialize<SoapFormatter>(b));
                                 Send(new IPEndPoint(IPAddress.Parse(additionMsg.From().address), additionMsg.From().port), additionMsg);
                             }
+                            if(node.cachedPercentage < 0) { node.cachedPercentage = 1 - cacheNeed.Sum(x => x.percentage); }
                             msg.id = CDNMessage.MSGID.PREPARE;
                             content = Serializer<FileNode>.Serialize<SoapFormatter>(node);
                         }

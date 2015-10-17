@@ -149,7 +149,7 @@ namespace CDN
                         }
                         else
                         {
-                            node.fileTemplate = node.fileTemplate.Except(cacheNeed).ToList();                    
+                            node.fileTemplate = cacheNeed;                    
                             msg.content = Serializer<FileNode>.Serialize<SoapFormatter>(node);
                             Send((ui as CDNCacheForm).remoteIpAddressControl.Value, msg);
                         }

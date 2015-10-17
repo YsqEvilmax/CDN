@@ -163,6 +163,7 @@ namespace CDN
             this.info = si.GetValue("FileInfo", typeof(FileInfo)) as FileInfo;
             this.fileTemplate = new List<string>();
             this.fileTemplate = this.fileTemplate.Deserialize(si.GetString("fileTemplate"));
+            this.cachedPercentage = si.GetDouble("cachedPercentage");
         }
 
         protected override void Serialize(SerializationInfo si, StreamingContext context)
@@ -170,6 +171,7 @@ namespace CDN
             base.Serialize(si, context);
             si.AddValue("FileInfo", this.info);
             si.AddValue("fileTemplate", this.fileTemplate.Serialize());
+            si.AddValue("cachedPercentage", this.cachedPercentage);
         }
 
         private readonly static int windowSize = 3;
