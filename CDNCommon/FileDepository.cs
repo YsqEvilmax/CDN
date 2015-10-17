@@ -207,9 +207,12 @@ namespace CDN
                     foreach (StreamBreaker.Segment s in container)
                     {
                         Block b = new Block(this, content.Substring((int)s.Offset, (int)s.Length));
-                        b.percentage = b.content.Length / content.Length;
+                        b.percentage = (double)b.content.Length / content.Length;
                         result.Add(b);
-                        fileTemplate.Add(b.ToString());
+                        if(!fileTemplate.Contains(b.ToString()))
+                        {
+                            fileTemplate.Add(b.ToString());
+                        }
                     }
                 }
             }
@@ -270,7 +273,7 @@ namespace CDN
 
         public override string ToString()
         {
-            return name + "|||" + percentage.ToString() + "%%%"  + content;
+            return name + "|||" + percentage.ToString();
         }
     }
 }
