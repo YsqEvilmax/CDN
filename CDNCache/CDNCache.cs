@@ -115,7 +115,7 @@ namespace CDN
                     {
                         //download the fragments
                         Block newBlock = Serializer<Block>.Deserialize<SoapFormatter>(msg.content);
-                        using (FileStream fs = new FileStream(newBlock.name, FileMode.Create, FileAccess.Write))
+                        using (FileStream fs = new FileStream(localRoot.FullPath + "\\" + newBlock.name, FileMode.Create, FileAccess.Write))
                         {
                             using (StreamWriter sw = new StreamWriter(fs))
                             {
@@ -128,8 +128,8 @@ namespace CDN
                     {
                         FileNode node = Serializer<FileNode>.Deserialize<SoapFormatter>(msg.content);
                         msg.id = CDNMessage.MSGID.DOWNLOAD;
-                        List<String> cacheHave = Ready(node.fileTemplate);
-                        if (cacheHave == node.fileTemplate)
+                        List<String> cacheNeed = Ready(node.fileTemplate);
+                        if (cacheNeed.Count == 0)
                         {
                             msg.content = node.Name;
                             foreach(String s in node.fileTemplate)
@@ -149,7 +149,7 @@ namespace CDN
                         }
                         else
                         {
-                            node.fileTemplate = cacheHave;                    
+                            node.fileTemplate = node.fileTemplate.Except(cacheNeed).ToList();                    
                             msg.content = Serializer<FileNode>.Serialize<SoapFormatter>(node);
                             Send((ui as CDNCacheForm).remoteIpAddressControl.Value, msg);
                         }
@@ -166,10 +166,10 @@ namespace CDN
             List<String> fegments = new List<string>();
             foreach (TreeNode t in localRoot.Nodes)
             {
-                fegments.Add(t.Name);
+                fegments.Add(t.Text);
             }
-            List<String> cacheHave = template.Intersect(fegments).ToList();
-            return cacheHave;
+            List<String> cacheNeed = template.Except(fegments).ToList();
+            return cacheNeed;
         }
         private Form ui;
     }
