@@ -182,25 +182,35 @@ namespace CDN
             {
                 using (StreamReader sr = new StreamReader(fs))
                 {
+                    //RabinPrintfinger rabin = new RabinPrintfinger();
+                    //int j = 0;
+                    //for (int i = 0; i < content.Length - windowSize; i++)
+                    //{
+                    //    String window = content.Substring(i, windowSize);
+                    //    if (rabin.PrintFinger(window) == 0)
+                    //    {
+                    //        Block b = new Block(this, content.Substring(j, i + windowSize - j));
+                    //        b.percentage = b.content.Length / content.Length;
+                    //        j = i;
+                    //        result.Add(b);
+                    //        fileTemplate.Add(b.ToString());
+                    //    }
+                    //}
+                    //Block lastb = new Block(this, content.Substring(j, content.Length - j));
+                    //lastb.percentage = lastb.content.Length / content.Length;
+                    //result.Add(lastb);
+                    //fileTemplate.Add(lastb.name);
+                    StreamBreaker sb = new StreamBreaker();
+                    List<StreamBreaker.Segment> container = sb.GetSegments(fs, fs.Length, new SHA1CryptoServiceProvider()).ToList();
+                    fs.Seek(0, SeekOrigin.Begin);
                     String content = sr.ReadToEnd();
-                    RabinPrintfinger rabin = new RabinPrintfinger();
-                    int j = 0;
-                    for (int i = 0; i < content.Length - windowSize; i++)
+                    foreach (StreamBreaker.Segment s in container)
                     {
-                        String window = content.Substring(i, windowSize);
-                        if (rabin.PrintFinger(window) == 0)
-                        {
-                            Block b = new Block(this, content.Substring(j, i + windowSize - j));
-                            b.percentage = b.content.Length / content.Length;
-                            j = i;
-                            result.Add(b);
-                            fileTemplate.Add(b.ToString());
-                        }
+                        Block b = new Block(this, content.Substring((int)s.Offset, (int)s.Length));
+                        b.percentage = b.content.Length / content.Length;
+                        result.Add(b);
+                        fileTemplate.Add(b.ToString());
                     }
-                    Block lastb = new Block(this, content.Substring(j, content.Length - j));
-                    lastb.percentage = lastb.content.Length / content.Length;
-                    result.Add(lastb);
-                    fileTemplate.Add(lastb.name);
                 }
             }
 
